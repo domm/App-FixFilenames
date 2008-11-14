@@ -6,6 +6,32 @@ use 5.010;
 use version; our $VERSION = version->new('0.01');
 
 use App::Cmd::Setup -app;
+use base 'Class::Accessor::Fast';
+use File::Find::Rule;
+
+__PACKAGE__->mk_accessors(qw(files dirs));
+
+
+sub global_opt_spec {
+    return (
+        ['dry-run','do not change anything'],
+        ['verbose+','well, be more verbose'],
+        ['dir=s','root directory to work from',{ default => '.'}],
+        ['type=s@','file type (without the dot)'],
+        ['recurse!','descend into subdirs',{default=>1}], 
+    );
+}
+
+sub findfiles {
+    my $self = shift;
+    my $gopts = $self->app->global_options;
+    
+    $self->files([
+        File::Find::Rule->file->name(
+            map { '*.'.$_ } @{$gopts->{type}}
+        )->in($gopts->{dir})
+    ]);
+}
 
 1;
 __END__
