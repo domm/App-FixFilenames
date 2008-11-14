@@ -15,11 +15,6 @@ sub run {
     
 }
 
-sub usage_desc { "%c %o foo" }
-
-sub opt_spec {  }
-
-
 1;
 __END__
 
@@ -28,6 +23,8 @@ __END__
 App::FixFilenames::Command::List - just list files
 
 =head1 SYNOPSIS
+
+Just list the stuff that's found
 
 =head1 DESCRIPTION
 
