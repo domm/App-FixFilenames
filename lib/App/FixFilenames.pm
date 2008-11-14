@@ -18,7 +18,7 @@ sub global_opt_spec {
         [ 'dry-run',  'do not change anything' ],
         [ 'verbose+', 'well, be more verbose' ],
         [ 'dir=s',    'root directory to work from', { default => '.' } ],
-        [ 'type=s@',  'file type (without the dot)' ],
+        [ 'type=s@',  'file type (without the dot)', { default => ['*'] } ],
         [ 'recurse!', 'descend into subdirs',        { default => 1 } ],
     );
 }
