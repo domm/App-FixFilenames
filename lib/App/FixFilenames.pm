@@ -11,7 +11,7 @@ use File::Find::Rule;
 use File::Spec::Functions qw(:ALL);
 use Data::Dumper;
 
-__PACKAGE__->mk_accessors(qw(files dirs filecount));
+__PACKAGE__->mk_accessors(qw(files dirs count));
 
 sub global_opt_spec {
     return (
@@ -33,29 +33,44 @@ sub findfiles {
                 )->in( $gopts->{dir} )
         ]
     );
-    if ($gopts->{verbose} > 1) {
+    if ( $gopts->{verbose} > 2 ) {
         say Dumper $self->files;
     }
 }
 
 sub rename_file {
-    my ($self, $oldpath, $dir, $new) = @_;
-    if ($self->dryrun) {
-        $self->{filecount}++;
+    my ( $self, $oldpath, $dir, $new ) = @_;
+
+    say "rename $oldpath to $new" if $self->verbose;
+
+    if ( $self->dryrun ) {
+        $self->{count}++;
         return $oldpath;
     }
-    
-    my $newpath = catfile($dir,$new);
+
+    my $newpath = catfile( $dir, $new );
     rename( $oldpath, $newpath )
-            || say STDERR "could not rename $oldpath to $newpath: $!";
-    }
-    $self->{filecount}++;
+        || say STDERR "could not rename $oldpath to $newpath: $!";
+    $self->{count}++;
     return $newpath;
 }
 
-sub verbose { return shift->app->global_options->{verbose} }
+sub splitfilepath {
+    my ( $self, $path ) = @_;
+    my ( undef, $dir, $file ) = splitpath($path);
+    $file =~ /^(?<file>.*)\.(?<ext>\w+)$/;
+    return ( $dir, $+{file}, $+{ext} );
+}
 
-sub dryrun { return shift->app->global_options->{dry-run} }
+sub report {
+    my $self = shift;
+    my $cnt  = $self->count;
+    say "processed $cnt file" . ( $cnt != 1 ? 's' : '' );
+}
+
+sub verbose { return shift->app->global_options->{'verbose'} }
+
+sub dryrun { return shift->app->global_options->{'dry_run'} }
 
 1;
 __END__
