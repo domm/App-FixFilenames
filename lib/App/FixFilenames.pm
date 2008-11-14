@@ -8,6 +8,8 @@ use version; our $VERSION = version->new('0.01');
 use App::Cmd::Setup -app;
 use base 'Class::Accessor::Fast';
 use File::Find::Rule;
+use File::Spec::Functions qw(:ALL);
+use Data::Dumper;
 
 __PACKAGE__->mk_accessors(qw(files dirs));
 
@@ -31,6 +33,9 @@ sub findfiles {
                 )->in( $gopts->{dir} )
         ]
     );
+    if ($gopts->{verbose} > 1) {
+        say Dumper $self->files;
+    }
 }
 
 1;
