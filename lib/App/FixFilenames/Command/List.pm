@@ -24,11 +24,11 @@ App::FixFilenames::Command::List - just list files
 
 =head1 SYNOPSIS
 
-Just list the stuff that's found
+  fixfilenames.pl list --type mp3
 
 =head1 DESCRIPTION
 
-App::FixFilenames is
+Just list the stuff that's found
 
 =head1 AUTHOR
 
