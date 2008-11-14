@@ -5,6 +5,8 @@ use warnings;
 use 5.010;
 use version; our $VERSION = version->new('0.01');
 
+use App::Cmd::Setup -app;
+
 1;
 __END__
 
