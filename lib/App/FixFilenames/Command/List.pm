@@ -8,11 +8,11 @@ use App::FixFilenames -command;
 use base 'App::FixFilenames';
 
 sub run {
-    my ($self, $opt, $args) = @_;
-    
+    my ( $self, $opt, $args ) = @_;
+
     $self->findfiles;
-    print join("\n",@{$self->files})."\n";
-    
+    print join( "\n", @{ $self->files } ) . "\n";
+
 }
 
 1;

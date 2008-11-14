@@ -11,26 +11,26 @@ use File::Find::Rule;
 
 __PACKAGE__->mk_accessors(qw(files dirs));
 
-
 sub global_opt_spec {
     return (
-        ['dry-run','do not change anything'],
-        ['verbose+','well, be more verbose'],
-        ['dir=s','root directory to work from',{ default => '.'}],
-        ['type=s@','file type (without the dot)'],
-        ['recurse!','descend into subdirs',{default=>1}], 
+        [ 'dry-run',  'do not change anything' ],
+        [ 'verbose+', 'well, be more verbose' ],
+        [ 'dir=s',    'root directory to work from', { default => '.' } ],
+        [ 'type=s@',  'file type (without the dot)' ],
+        [ 'recurse!', 'descend into subdirs',        { default => 1 } ],
     );
 }
 
 sub findfiles {
-    my $self = shift;
+    my $self  = shift;
     my $gopts = $self->app->global_options;
-    
-    $self->files([
-        File::Find::Rule->file->name(
-            map { '*.'.$_ } @{$gopts->{type}}
-        )->in($gopts->{dir})
-    ]);
+
+    $self->files( [
+            File::Find::Rule->file->name(
+                map { '*.' . $_ } @{ $gopts->{type} }
+                )->in( $gopts->{dir} )
+        ]
+    );
 }
 
 1;
