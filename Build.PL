@@ -13,6 +13,7 @@ my $builder = Module::Build->new(
     },
     requires => {
         'perl'             => '5.010',
+        'App::Cmd'         => '0.202',
     },
     add_to_cleanup     => ['App-FixFilenames-*'],
     create_makefile_pl => 'passthrough',
