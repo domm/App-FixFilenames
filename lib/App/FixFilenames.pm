@@ -11,7 +11,7 @@ use File::Find::Rule;
 use File::Spec::Functions qw(:ALL);
 use Data::Dumper;
 
-__PACKAGE__->mk_accessors(qw(files dirs));
+__PACKAGE__->mk_accessors(qw(files dirs filecount));
 
 sub global_opt_spec {
     return (
@@ -36,6 +36,16 @@ sub findfiles {
     if ($gopts->{verbose} > 1) {
         say Dumper $self->files;
     }
+}
+
+sub rename_file {
+    my ($self, $oldpath, $dir, $new) = @_;
+    my $newpath = catfile($dir,$new);
+    rename( $oldpath, $newpath )
+            || say STDERR "could not rename $oldpath to $newpath: $!";
+    }
+    $self->{filecount}++;
+    return $newpath;
 }
 
 sub verbose { return shift->app->global_options->{verbose} }
