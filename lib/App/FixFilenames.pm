@@ -38,6 +38,8 @@ sub findfiles {
     }
 }
 
+sub verbose { return shift->app->global_options->{verbose} }
+
 1;
 __END__
 
