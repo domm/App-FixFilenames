@@ -40,6 +40,11 @@ sub findfiles {
 
 sub rename_file {
     my ($self, $oldpath, $dir, $new) = @_;
+    if ($self->dryrun) {
+        $self->{filecount}++;
+        return $oldpath;
+    }
+    
     my $newpath = catfile($dir,$new);
     rename( $oldpath, $newpath )
             || say STDERR "could not rename $oldpath to $newpath: $!";
@@ -49,6 +54,8 @@ sub rename_file {
 }
 
 sub verbose { return shift->app->global_options->{verbose} }
+
+sub dryrun { return shift->app->global_options->{dry-run} }
 
 1;
 __END__
