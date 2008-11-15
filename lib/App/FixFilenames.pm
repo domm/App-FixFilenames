@@ -33,7 +33,7 @@ sub findfiles {
                 )->in( $gopts->{dir} )
         ]
     );
-    if ( $gopts->{verbose} > 2 ) {
+    if ( $self->verbose > 2 ) {
         say Dumper $self->files;
     }
 }
@@ -68,9 +68,9 @@ sub report {
     say "processed $cnt file" . ( $cnt != 1 ? 's' : '' );
 }
 
-sub verbose { return shift->app->global_options->{'verbose'} }
+sub verbose { return shift->app->global_options->{'verbose'} || 0 }
 
-sub dryrun { return shift->app->global_options->{'dry_run'} }
+sub dryrun { return shift->app->global_options->{'dry_run'} || 0}
 
 1;
 __END__
