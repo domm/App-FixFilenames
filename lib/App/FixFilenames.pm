@@ -47,8 +47,8 @@ sub rename_file {
         $self->{count}++;
         return $oldpath;
     }
-
-    my $newpath = catfile( $dir, $new );
+    
+    my $newpath = $dir ? catfile( $dir, $new ) : $new;
     rename( $oldpath, $newpath )
         || say STDERR "could not rename $oldpath to $newpath: $!";
     $self->{count}++;
