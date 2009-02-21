@@ -23,13 +23,17 @@ sub global_opt_spec {
     );
 }
 
+
 sub findfiles {
     my $self  = shift;
+    my $opts = shift || {};
     my $gopts = $self->app->global_options;
-
+    
+    my $type = $opts->{type} // $gopts->{type};
+    
     $self->files( [
             File::Find::Rule->file->name(
-                map { '*.' . $_ } @{ $gopts->{type} }
+                map { '*.' . $_ } @$type 
                 )->in( $gopts->{dir} )
         ]
     );
