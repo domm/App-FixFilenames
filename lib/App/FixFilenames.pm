@@ -94,6 +94,16 @@ sub verbose { return shift->app->global_options->{'verbose'} || 0 }
 
 sub dryrun { return shift->app->global_options->{'dry_run'} || 0}
 
+sub _safe_filename {
+    my ($self, $filename) = @_;
+    $filename=~s/[^A-Za-z\d\/\-_]/_/g;
+    $filename=~s/_-_/_/g;
+    $filename=~s/_+/_/g;
+    $filename=~s/^_//g;
+    $filename=~s/_$//g;
+    return lc($filename);
+}
+
 1;
 __END__
 
