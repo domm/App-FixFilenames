@@ -86,7 +86,7 @@ sub splitfilepath {
 
 sub report {
     my $self = shift;
-    my $cnt  = $self->count;
+    my $cnt  = $self->count || 0;
     say "processed $cnt file" . ( $cnt != 1 ? 's' : '' );
 }
 
