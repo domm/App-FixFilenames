@@ -1,0 +1,18 @@
+.gitignore
+bin/fixfilenames.pl
+Build.PL
+Changes
+lib/App/FixFilenames.pm
+lib/App/FixFilenames/Command/Cut2Tracknum.pm
+lib/App/FixFilenames/Command/Gogear.pm
+lib/App/FixFilenames/Command/List.pm
+lib/App/FixFilenames/Command/Ordered.pm
+lib/App/FixFilenames/Command/TVSeries.pm
+MANIFEST			This list of files
+README
+t/00-load.t
+xt/01_podspell.t
+xt/02_perlcritic.t
+xt/03_pod.t
+xt/04_podcoverage.t
+xt/perlcriticrc
