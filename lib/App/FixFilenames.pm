@@ -9,7 +9,7 @@ use App::Cmd::Setup -app;
 use base 'Class::Accessor::Fast';
 use File::Find::Rule;
 use File::Spec::Functions qw(:ALL);
-use Data::Dumper;
+use File::Copy;
 
 __PACKAGE__->mk_accessors(qw(files dirs count));
 
@@ -51,6 +51,24 @@ sub rename_file {
     my $newpath = $dir ? catfile( $dir, $new ) : $new;
     rename( $oldpath, $newpath )
         || say STDERR "could not rename $oldpath to $newpath: $!";
+    $self->{count}++;
+    return $newpath;
+}
+
+sub copy_file {
+    my ( $self, $oldpath, $dir, $new ) = @_;
+    
+    my $newpath = $dir ? catfile( $dir, $new ) : $new;
+
+    say "copy $oldpath to $newpath" if $self->verbose;
+
+    if ( $self->dryrun ) {
+        $self->{count}++;
+        return $oldpath;
+    }
+    
+    copy( $oldpath, $newpath )
+        || say STDERR "could not copy $oldpath to $newpath: $!";
     $self->{count}++;
     return $newpath;
 }
