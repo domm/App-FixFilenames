@@ -12,27 +12,31 @@ use Data::Dumper;
 
 sub opt_spec {
     my $self = shift;
-    
-    return (
-        [ 'gogear=s',    'mount point of gogear disk', { default => '/mnt/gogear' }  ],
-        [ 'type=s@',    'file type (default mp3)', { default => ['mp3'] }  ],
+
+    return ( [
+            'gogear=s',
+            'mount point of gogear disk',
+            { default => '/mnt/gogear' }
+        ],
+        [ 'type=s@', 'file type (default mp3)', { default => ['mp3'] } ],
     );
 }
 
 sub run {
     my ( $self, $opt, $args ) = @_;
-    
+
     $self->findfiles($opt);
 
     foreach my $path ( @{ $self->files } ) {
         say "processing $path" if $self->verbose > 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
-        
+
         my $info = MP3::Info->new($path);
-        my $album = $self->_safe_filename($info->album // 'unkown');
-        
-        $file = $album .'_'.$file .'.'.$ext;
-        $self->copy_file( $path, catdir($opt->{gogear},qw(_system media audio)), $file );
+        my $album = $self->_safe_filename( $info->album // 'unkown' );
+
+        $file = $album . '_' . $file . '.' . $ext;
+        $self->copy_file( $path,
+            catdir( $opt->{gogear}, qw(_system media audio) ), $file );
     }
 
     $self->report;

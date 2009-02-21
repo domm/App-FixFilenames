@@ -23,18 +23,16 @@ sub global_opt_spec {
     );
 }
 
-
 sub findfiles {
     my $self  = shift;
-    my $opts = shift || {};
+    my $opts  = shift || {};
     my $gopts = $self->app->global_options;
-    
+
     my $type = $opts->{type} // $gopts->{type};
-    
+
     $self->files( [
-            File::Find::Rule->file->name(
-                map { '*.' . $_ } @$type 
-                )->in( $gopts->{dir} )
+            File::Find::Rule->file->name( map { '*.' . $_ } @$type )
+                ->in( $gopts->{dir} )
         ]
     );
     if ( $self->verbose > 2 ) {
@@ -51,7 +49,7 @@ sub rename_file {
         $self->{count}++;
         return $oldpath;
     }
-    
+
     my $newpath = $dir ? catfile( $dir, $new ) : $new;
     rename( $oldpath, $newpath )
         || say STDERR "could not rename $oldpath to $newpath: $!";
@@ -61,7 +59,7 @@ sub rename_file {
 
 sub copy_file {
     my ( $self, $oldpath, $dir, $new ) = @_;
-    
+
     my $newpath = $dir ? catfile( $dir, $new ) : $new;
 
     say "copy $oldpath to $newpath" if $self->verbose;
@@ -70,7 +68,7 @@ sub copy_file {
         $self->{count}++;
         return $oldpath;
     }
-    
+
     copy( $oldpath, $newpath )
         || say STDERR "could not copy $oldpath to $newpath: $!";
     $self->{count}++;
@@ -86,21 +84,21 @@ sub splitfilepath {
 
 sub report {
     my $self = shift;
-    my $cnt  = $self->count || 0;
+    my $cnt = $self->count || 0;
     say "processed $cnt file" . ( $cnt != 1 ? 's' : '' );
 }
 
 sub verbose { return shift->app->global_options->{'verbose'} || 0 }
 
-sub dryrun { return shift->app->global_options->{'dry_run'} || 0}
+sub dryrun { return shift->app->global_options->{'dry_run'} || 0 }
 
 sub _safe_filename {
-    my ($self, $filename) = @_;
-    $filename=~s/[^A-Za-z\d\/\-_]/_/g;
-    $filename=~s/_-_/_/g;
-    $filename=~s/_+/_/g;
-    $filename=~s/^_//g;
-    $filename=~s/_$//g;
+    my ( $self, $filename ) = @_;
+    $filename =~ s/[^A-Za-z\d\/\-_]/_/g;
+    $filename =~ s/_-_/_/g;
+    $filename =~ s/_+/_/g;
+    $filename =~ s/^_//g;
+    $filename =~ s/_$//g;
     return lc($filename);
 }
 
