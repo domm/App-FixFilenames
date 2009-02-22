@@ -10,6 +10,7 @@ use base 'Class::Accessor::Fast';
 use File::Find::Rule;
 use File::Spec::Functions qw(:ALL);
 use File::Copy;
+use Data::Dumper;
 
 __PACKAGE__->mk_accessors(qw(files dirs count));
 
