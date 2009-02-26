@@ -37,7 +37,7 @@ sub findfiles {
         ]
     );
     if ( $self->verbose > 2 ) {
-        say Dumper $self->files;
+        say Data::Dumper::Dumper $self->files;
     }
 }
 
