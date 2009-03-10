@@ -12,6 +12,7 @@ use File::stat;
 sub opt_spec {
     return (
         [ 'base=s',    'base name for new files' ],
+        [ 'start=s',   'start counter' ],
     );
 }
 
@@ -30,7 +31,7 @@ sub run {
     my $format = $opt->{base} ? $opt->{base}.'_' : '';
     $format.="%0".length(scalar keys %info)."d";
     
-    my $count = 1;
+    my $count = $opt->{start} // 1;
     foreach my $path ( sort { $info{$a} <=> $info{$b} } keys %info ) {
         say "processing $path $info{$path}" if $self->verbose >= 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
