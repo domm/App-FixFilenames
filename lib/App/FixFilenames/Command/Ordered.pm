@@ -16,7 +16,6 @@ sub opt_spec {
     );
 }
 
-
 sub run {
     my ( $self, $opt, $args ) = @_;
 

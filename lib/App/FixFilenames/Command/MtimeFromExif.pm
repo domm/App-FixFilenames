@@ -28,11 +28,12 @@ sub run {
         my $created_epoch=$dt->epoch;
         my $mtime = stat($path)->mtime;
         next if $mtime == $created_epoch;
-        say "$path: fix mtime from $mtime to $created_epoch";
+        say "$path: fix mtime from $mtime to $created_epoch" if $self->verbose >= 1;
         utime($created_epoch,$created_epoch,$path);
+        $self->{count}++;
     }
     
-    #$self->report;
+    $self->report;
 }
 
 1;
