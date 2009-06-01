@@ -108,7 +108,7 @@ __END__
 
 =head1 NAME
 
-App::FixFilenames -
+App::FixFilenames - various tools to help keep filenames sane
 
 =head1 SYNOPSIS
 
