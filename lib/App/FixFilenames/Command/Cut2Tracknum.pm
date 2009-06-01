@@ -15,7 +15,7 @@ sub run {
     foreach my $path ( @{ $self->files } ) {
         say "processing $path" if $self->verbose > 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
-        next unless $file =~/^\d+/; 
+        next unless $file =~/\d+/; 
         $file =~ s/\D//g;
         my $new = sprintf( "%02d", $file );
         $self->rename_file( $path, $dir, $new . '.' . $ext );
