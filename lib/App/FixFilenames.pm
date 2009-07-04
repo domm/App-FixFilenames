@@ -76,6 +76,24 @@ sub copy_file {
     return $newpath;
 }
 
+sub move_file {
+    my ( $self, $oldpath, $dir, $new ) = @_;
+
+    my $newpath = $dir ? catfile( $dir, $new ) : $new;
+
+    say "move $oldpath to $newpath" if $self->verbose;
+
+    if ( $self->dryrun ) {
+        $self->{count}++;
+        return $oldpath;
+    }
+
+    move( $oldpath, $newpath )
+        || say STDERR "could not move $oldpath to $newpath: $!";
+    $self->{count}++;
+    return $newpath;
+}
+
 sub splitfilepath {
     my ( $self, $path ) = @_;
     my ( undef, $dir, $file ) = splitpath($path);
