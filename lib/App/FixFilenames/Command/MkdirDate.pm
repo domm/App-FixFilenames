@@ -22,12 +22,11 @@ sub run {
         my $dt = DateTime->from_epoch(epoch=>$mtime);
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
         my $datedir = $dt->ymd('');
-        say "$datedir";
         unless (-d $datedir) {
             mkdir($datedir);
         }
 
-        $self->move_file( $path, $datedir,$file);
+        $self->move_file( $path, $datedir,$file.'.'.$ext);
     }
 
     $self->report;
