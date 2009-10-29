@@ -10,6 +10,7 @@ use base 'Class::Accessor::Fast';
 use File::Find::Rule;
 use File::Spec::Functions qw(:ALL);
 use File::Copy;
+use File::Path qw(make_path);
 use Data::Dumper;
 
 __PACKAGE__->mk_accessors(qw(files dirs count));
@@ -62,6 +63,7 @@ sub copy_file {
     my ( $self, $oldpath, $dir, $new ) = @_;
 
     my $newpath = $dir ? catfile( $dir, $new ) : $new;
+    make_path($dir) if $dir &&  !-d $dir;
 
     say "copy $oldpath to $newpath" if $self->verbose;
 
@@ -80,6 +82,7 @@ sub move_file {
     my ( $self, $oldpath, $dir, $new ) = @_;
 
     my $newpath = $dir ? catfile( $dir, $new ) : $new;
+    make_path($dir) if $dir &&  !-d $dir;
 
     say "move $oldpath to $newpath" if $self->verbose;
 
