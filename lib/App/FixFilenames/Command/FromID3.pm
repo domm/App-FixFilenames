@@ -27,14 +27,14 @@ sub run {
         say "processing $path" if $self->verbose > 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
 
+        next if $file =~ /^\d+_[\w\d_-]+$/;
+
         my $info = MP3::Info->new($path);
-        my $title = $self->_safe_filename( $info->title // 'unkown_'.int(rand(1000)) );
-        my $tracknum=$info->tracknum;
+        my $raw_title = $info->title;
+        $raw_title=~s/^.*\///g;
+        my $title = $self->_safe_filename( $raw_title // 'unkown_'.int(rand(1000)) );
+        my $tracknum=$info->tracknum || 0;
         $tracknum=~s/\D+.*//;
-        unless ($tracknum) {
-            say "no tracknum in ID3, skipping $path";
-            next;
-        }
         my $new = sprintf("%02d_%s.mp3",$tracknum,$title);
 
         $self->rename_file( $path, $dir, $new );

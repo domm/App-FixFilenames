@@ -30,8 +30,7 @@ sub findfiles {
     my $opts  = shift || {};
     my $gopts = $self->app->global_options;
 
-    my $type = $opts->{type} // $gopts->{type};
-
+    my $type =$opts->{type} // $gopts->{type};
     $self->files( [
             File::Find::Rule->file->name( map { '*.' . $_ } @$type )
                 ->in( $gopts->{dir} )
