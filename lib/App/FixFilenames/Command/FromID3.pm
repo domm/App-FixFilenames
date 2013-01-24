@@ -15,6 +15,7 @@ sub opt_spec {
 
     return ( 
         [ 'type=s@', 'file type (default mp3)', { default => ['mp3'] } ],
+        [ 'force', 'rename files even if the already seem ok' ],
     );
 }
 
@@ -27,17 +28,29 @@ sub run {
         say "processing $path" if $self->verbose > 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
 
-        next if $file =~ /^\d+_[\w\d_-]+$/;
+        next if $file =~ /^\d+_[\w\d_-]+$/ && !$opt->{force};
 
         my $info = MP3::Info->new($path);
         my $raw_title = $info->title;
         $raw_title=~s/^.*\///g;
-        my $title = $self->_safe_filename( $raw_title // 'unkown_'.int(rand(1000)) );
-        my $tracknum=$info->tracknum || 0;
-        $tracknum=~s/\D+.*//;
-        my $new = sprintf("%02d_%s.mp3",$tracknum,$title);
+        my $title;
+        if (!$info->album) {
+            if ($info->artist) {
+                $title = join('_',$self->_safe_filename($info->artist),$self->_safe_filename($info->title));
+            }
+            else {
+                $title = 'unkown_'.int(rand(1000));
+            }
+            $title.='.mp3';
+        }
+        else {
+            $title = $self->_safe_filename( $raw_title );
+            my $tracknum=$info->tracknum || 0;
+            $tracknum=~s/\D+.*//;
+            $title = sprintf("%02d_%s.mp3",$tracknum,$title);
+        }
 
-        $self->rename_file( $path, $dir, $new );
+        $self->rename_file( $path, $dir, $title );
     }
 
     $self->report;
