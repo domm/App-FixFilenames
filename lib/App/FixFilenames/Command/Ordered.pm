@@ -18,6 +18,8 @@ sub opt_spec {
         [ 'start=s',   'start counter' ],
         [ 'padding=s',   'number of zeros to pad' ],
         [ 'exif',        'use exif date instead of file mtime'],
+        [ 'filename',        'use filename instead of file mtime'],
+        [ 'reverse',        'reverse order'],
     );
 }
 
@@ -27,7 +29,7 @@ sub run {
     $self->findfiles;
 
     my %info;
-    
+    my $sortmode = 'numeric';
     if ($opt->{exif}) {
         foreach my $path ( @{ $self->files } ) {
             my $exif = Image::ExifTool->new;
@@ -36,6 +38,12 @@ sub run {
             $info{$path}=$created;
             utime($created,$created,$path);
         }
+    }
+    elsif ($opt->{filename}) {
+        foreach my $path ( @{ $self->files } ) {
+            $info{$path}=$path;
+        }
+        $sortmode = 'text';
     }
     else {
         foreach my $path ( @{ $self->files } ) {
@@ -51,7 +59,18 @@ sub run {
     $format.="%0".$zeros."d";
     
     my $count = $opt->{start} // 1;
-    foreach my $path ( sort { $info{$a} <=> $info{$b} } keys %info ) {
+    my @sorted;
+    if ($sortmode eq 'numeric') {
+        @sorted = sort { $info{$a} <=> $info{$b} } keys %info
+    }
+    else {
+        @sorted = sort { $info{$a} cmp $info{$b} } keys %info
+    }
+
+    if ($opt->{reverse}) {
+        @sorted = reverse @sorted;
+    }
+    foreach my $path ( @sorted ) {
         say "processing $path $info{$path}" if $self->verbose >= 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
         my $new = sprintf( $format, $count++ );
