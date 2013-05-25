@@ -45,7 +45,11 @@ sub run {
         }
         else {
             $title = $self->_safe_filename( $raw_title );
-            my $tracknum=$info->tracknum || 0;
+            my $tracknum=$info->tracknum;
+            if (!$tracknum && $file=~/^(\d+)/) {
+                $tracknum = $1;
+            }
+            $tracknum ||=0;
             $tracknum=~s/\D+.*//;
             $title = sprintf("%02d_%s.mp3",$tracknum,$title);
         }

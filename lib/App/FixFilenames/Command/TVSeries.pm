@@ -12,6 +12,7 @@ sub opt_spec {
         [ 'base=s',    'base name for new files' ],
         [ 'season_regex=s',   'regex for season prefix (default /s/)' ],
         [ 'episode_regex=s',   'regex for episode prefix default /e/)' ],
+        [ 'mixed', 'parse something like 201 into s01e01'],
     );
 }
 
@@ -28,10 +29,19 @@ sub run {
         say "processing $path" if $self->verbose > 1;
         my ( $dir, $file, $ext ) = $self->splitfilepath($path);
 
-        $file=~/$regex/;
-        die "Cannot find season or episode in $file" unless $+{season} && $+{episode};
+        my %match;
+
+        if ($opt->{mixed}) {
+            $file=~/(?<season>\d)(?<episode>\d\d)/;
+            %match = %+;
+        }
+        else {
+            $file=~/$regex/;
+            %match = %+;
+        }
+        die "Cannot find season or episode in $file" unless $match{season} && $match{episode};
         my $new = $opt->{base} ? $opt->{base}.'_' : '';
-        $new.= sprintf( "s%02de%02d", $+{season},$+{episode} );
+        $new.= sprintf( "s%02de%02d", $match{season},$match{episode} );
         $self->rename_file( $path, $dir, $new . '.' . $ext );
     }
 
