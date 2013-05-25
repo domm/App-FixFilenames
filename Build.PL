@@ -15,9 +15,11 @@ my $builder = Module::Build->new(
         'perl'             => '5.010',
         'App::Cmd'         => '0.202',
     },
+    script_files=>[qw(bin/fixfilenames.pl)],
     add_to_cleanup     => ['App-FixFilenames-*'],
     create_makefile_pl => 'passthrough',
     recursive_test_files => 1,
+    fix_shebang_line=>['bin/fixfilenames.pl'],
 );
 
 $builder->create_build_script();
